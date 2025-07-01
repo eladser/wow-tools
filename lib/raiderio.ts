@@ -166,7 +166,7 @@ function getApiBaseUrl(): string {
 }
 
 /**
- * Fetch character data from our API (which proxies Raider.IO)
+ * Fetch character data - tries API route first, falls back to direct call
  */
 export async function getCharacterProfile(
   region: string,
@@ -174,15 +174,37 @@ export async function getCharacterProfile(
   name: string,
   fields: string[] = ['mythic_plus_scores_by_season:current', 'mythic_plus_recent_runs', 'mythic_plus_best_runs', 'mythic_plus_alternate_runs', 'mythic_plus_highest_level_runs']
 ): Promise<RaiderIOCharacter> {
-  const baseUrl = getApiBaseUrl();
   const fieldsParam = fields.join(',');
-  const url = `${baseUrl}/api/character?region=${encodeURIComponent(region)}&realm=${encodeURIComponent(realm)}&name=${encodeURIComponent(name)}&fields=${encodeURIComponent(fieldsParam)}`;
   
-  const response = await fetch(url);
+  // Try API route first
+  if (isClientSide()) {
+    try {
+      const apiUrl = `/api/character?region=${encodeURIComponent(region)}&realm=${encodeURIComponent(realm)}&name=${encodeURIComponent(name)}&fields=${encodeURIComponent(fieldsParam)}`;
+      const response = await fetch(apiUrl);
+      
+      if (response.ok) {
+        return response.json();
+      }
+      
+      // If API route fails (404), fall back to direct call
+      if (response.status === 404) {
+        console.warn('API route not available, falling back to direct Raider.IO call');
+      }
+    } catch (error) {
+      console.warn('API route failed, falling back to direct Raider.IO call:', error);
+    }
+  }
+  
+  // Direct Raider.IO API call (fallback)
+  const directUrl = `${RAIDERIO_BASE_URL}/characters/profile?region=${encodeURIComponent(region)}&realm=${encodeURIComponent(realm)}&name=${encodeURIComponent(name)}&fields=${encodeURIComponent(fieldsParam)}`;
+  
+  const response = await fetch(directUrl);
   
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ error: response.statusText }));
-    throw new Error(errorData.error || `Failed to fetch character data: ${response.statusText}`);
+    if (response.status === 404) {
+      throw new Error('Character not found');
+    }
+    throw new Error(`Failed to fetch character data: ${response.statusText}`);
   }
   
   return response.json();
@@ -208,24 +230,42 @@ export async function getCharacterProfileWithAllSeasons(
 }
 
 /**
- * Get current mythic plus affixes from our API
+ * Get current mythic plus affixes - tries API route first, falls back to direct call
  */
 export async function getCurrentAffixes(region: string = 'us'): Promise<MythicPlusAffixes> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/api/affixes?region=${encodeURIComponent(region)}`;
+  // Try API route first
+  if (isClientSide()) {
+    try {
+      const apiUrl = `/api/affixes?region=${encodeURIComponent(region)}`;
+      const response = await fetch(apiUrl);
+      
+      if (response.ok) {
+        return response.json();
+      }
+      
+      // If API route fails (404), fall back to direct call
+      if (response.status === 404) {
+        console.warn('API route not available, falling back to direct Raider.IO call');
+      }
+    } catch (error) {
+      console.warn('API route failed, falling back to direct Raider.IO call:', error);
+    }
+  }
   
-  const response = await fetch(url);
+  // Direct Raider.IO API call (fallback)
+  const directUrl = `${RAIDERIO_BASE_URL}/mythic-plus/affixes?region=${encodeURIComponent(region)}`;
+  
+  const response = await fetch(directUrl);
   
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ error: response.statusText }));
-    throw new Error(errorData.error || `Failed to fetch affixes: ${response.statusText}`);
+    throw new Error(`Failed to fetch affixes: ${response.statusText}`);
   }
   
   return response.json();
 }
 
 /**
- * Get mythic plus runs for a specific dungeon (direct API call since we don't have a proxy for this yet)
+ * Get mythic plus runs for a specific dungeon (direct API call)
  */
 export async function getDungeonRuns(
   region: string,
