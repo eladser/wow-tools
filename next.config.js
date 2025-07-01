@@ -2,10 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'export',
+  // Removed 'output: export' to enable API routes
+  // output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  distDir: 'out',
+  // Removed distDir for normal Next.js build
+  // distDir: 'out',
   images: {
     unoptimized: true,
     domains: ['assets.raider.io', 'render.worldofwarcraft.com'],
@@ -14,9 +16,9 @@ const nextConfig = {
     WARCRAFTLOGS_CLIENT_ID: process.env.WARCRAFTLOGS_CLIENT_ID,
     WARCRAFTLOGS_CLIENT_SECRET: process.env.WARCRAFTLOGS_CLIENT_SECRET,
   },
-  // GitHub Pages deployment
-  basePath: process.env.NODE_ENV === 'production' ? '/wow-tools' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/wow-tools/' : '',
+  // Removed basePath and assetPrefix for normal deployment
+  // basePath: process.env.NODE_ENV === 'production' ? '/wow-tools' : '',
+  // assetPrefix: process.env.NODE_ENV === 'production' ? '/wow-tools/' : '',
 };
 
 module.exports = nextConfig;
