@@ -15,9 +15,9 @@ export default function Home() {
     {
       icon: <Sword className="w-8 h-8 text-wow-purple" />,
       title: "Mythic+ Tools",
-      description: "Track your M+ progress, analyze routes, and compare seasonal performance.",
+      description: "Track your M+ progress, view seasonal history, and analyze character performance with Raider.IO integration.",
       href: "/mythic-plus",
-      status: "Coming Soon"
+      status: "Available"
     },
     {
       icon: <Users className="w-8 h-8 text-wow-orange" />,
@@ -28,10 +28,10 @@ export default function Home() {
     },
     {
       icon: <Trophy className="w-8 h-8 text-wow-gold" />,
-      title: "Raider.IO Integration",
-      description: "View previous season scores, character progression, and guild analytics.",
-      href: "/raiderio",
-      status: "Coming Soon"
+      title: "Additional Tools",
+      description: "More utilities including guild analytics, achievement tracking, and performance comparisons.",
+      href: "/tools",
+      status: "Planned"
     }
   ]
 
@@ -60,7 +60,13 @@ export default function Home() {
                     {tool.title}
                   </h3>
                   {tool.status && (
-                    <span className="text-sm bg-wow-gold/20 text-wow-gold px-2 py-1 rounded">
+                    <span className={`text-sm px-2 py-1 rounded ${
+                      tool.status === "Available" 
+                        ? "bg-green-600/20 text-green-400" 
+                        : tool.status === "Coming Soon"
+                        ? "bg-wow-gold/20 text-wow-gold"
+                        : "bg-gray-600/20 text-gray-400"
+                    }`}>
                       {tool.status}
                     </span>
                   )}
@@ -68,14 +74,18 @@ export default function Home() {
                 <p className="text-gray-300 mb-4">
                   {tool.description}
                 </p>
-                {tool.status === "Coming Soon" ? (
+                {tool.status === "Available" ? (
+                  <Link href={tool.href} className="inline-block wow-button">
+                    Launch Tool
+                  </Link>
+                ) : tool.status === "Coming Soon" ? (
                   <button className="wow-button opacity-50 cursor-not-allowed" disabled>
                     Coming Soon
                   </button>
                 ) : (
-                  <Link href={tool.href} className="inline-block wow-button">
-                    Launch Tool
-                  </Link>
+                  <button className="wow-button opacity-30 cursor-not-allowed" disabled>
+                    Planned
+                  </button>
                 )}
               </div>
             </div>
