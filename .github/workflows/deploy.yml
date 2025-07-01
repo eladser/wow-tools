@@ -19,8 +19,11 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Clean API directory 🧹
-      run: rm -rf app/api || true
+    - name: Remove API routes 🧹
+      run: |
+        find app/api -name "*.ts" -delete || true
+        find app/api -name "*.js" -delete || true
+        find app/api -type d -empty -delete || true
 
     - name: Install dependencies 🔧
       run: npm install
