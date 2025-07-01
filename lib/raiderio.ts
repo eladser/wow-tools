@@ -189,6 +189,25 @@ export async function getCharacterProfile(
 }
 
 /**
+ * Fetch character data with ALL season history
+ */
+export async function getCharacterProfileWithAllSeasons(
+  region: string,
+  realm: string,
+  name: string
+): Promise<RaiderIOCharacter> {
+  const fields = [
+    'mythic_plus_scores_by_season:all',
+    'mythic_plus_recent_runs',
+    'mythic_plus_best_runs',
+    'mythic_plus_alternate_runs',
+    'mythic_plus_highest_level_runs'
+  ];
+  
+  return getCharacterProfile(region, realm, name, fields);
+}
+
+/**
  * Get current mythic plus affixes from our API
  */
 export async function getCurrentAffixes(region: string = 'us'): Promise<MythicPlusAffixes> {
@@ -222,6 +241,74 @@ export async function getDungeonRuns(
   }
   
   return response.json();
+}
+
+/**
+ * Generate WarcraftLogs URL for a character
+ */
+export function getWarcraftLogsUrl(characterName: string, realm: string, region: string): string {
+  // WarcraftLogs uses different region format
+  const wclRegion = region.toUpperCase();
+  const encodedName = encodeURIComponent(characterName);
+  const encodedRealm = encodeURIComponent(realm);
+  
+  return `https://www.warcraftlogs.com/character/${wclRegion}/${encodedRealm}/${encodedName}`;
+}
+
+/**
+ * Generate Raider.IO profile URL for a character
+ */
+export function getRaiderIOUrl(characterName: string, realm: string, region: string): string {
+  const encodedName = encodeURIComponent(characterName);
+  const encodedRealm = encodeURIComponent(realm);
+  
+  return `https://raider.io/characters/${region}/${encodedRealm}/${encodedName}`;
+}
+
+/**
+ * Generate WoWProgress URL for a character
+ */
+export function getWoWProgressUrl(characterName: string, realm: string, region: string): string {
+  const encodedName = encodeURIComponent(characterName);
+  const encodedRealm = encodeURIComponent(realm);
+  
+  return `https://www.wowprogress.com/character/${region}/${encodedRealm}/${encodedName}`;
+}
+
+/**
+ * Get season name from season ID
+ */
+export function getSeasonName(seasonId: string): string {
+  const seasonNames: { [key: string]: string } = {
+    'season-df-1': 'Dragonflight Season 1',
+    'season-df-2': 'Dragonflight Season 2', 
+    'season-df-3': 'Dragonflight Season 3',
+    'season-df-4': 'Dragonflight Season 4',
+    'season-tww-1': 'The War Within Season 1',
+    'season-tww-2': 'The War Within Season 2',
+    'season-sl-1': 'Shadowlands Season 1',
+    'season-sl-2': 'Shadowlands Season 2',
+    'season-sl-3': 'Shadowlands Season 3',
+    'season-sl-4': 'Shadowlands Season 4',
+    'season-bfa-1': 'Battle for Azeroth Season 1',
+    'season-bfa-2': 'Battle for Azeroth Season 2',
+    'season-bfa-3': 'Battle for Azeroth Season 3',
+    'season-bfa-4': 'Battle for Azeroth Season 4',
+  };
+  
+  return seasonNames[seasonId] || seasonId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+/**
+ * Get the current season from the character data
+ */
+export function getCurrentSeason(character: RaiderIOCharacter): string | null {
+  if (!character.mythic_plus_scores_by_season || character.mythic_plus_scores_by_season.length === 0) {
+    return null;
+  }
+  
+  // Assuming the first season in the array is the current one
+  return character.mythic_plus_scores_by_season[0].season;
 }
 
 /**
@@ -269,4 +356,35 @@ export function getRoleIcon(role: string): string {
     case 'dps': return '⚔️';
     default: return '❓';
   }
+}
+
+/**
+ * Sort seasons chronologically (newest first)
+ */
+export function sortSeasons(seasons: Array<{ season: string; scores: any }>): Array<{ season: string; scores: any }> {
+  return [...seasons].sort((a, b) => {
+    // Extract season info for sorting
+    const getSeasonOrder = (season: string) => {
+      if (season.includes('tww')) return 1000; // The War Within (newest)
+      if (season.includes('df')) return 900;   // Dragonflight
+      if (season.includes('sl')) return 800;   // Shadowlands
+      if (season.includes('bfa')) return 700;  // Battle for Azeroth
+      return 0; // Unknown/older
+    };
+    
+    const getSeasonNumber = (season: string) => {
+      const match = season.match(/-(\d+)$/);
+      return match ? parseInt(match[1]) : 0;
+    };
+    
+    const aOrder = getSeasonOrder(a.season);
+    const bOrder = getSeasonOrder(b.season);
+    
+    if (aOrder !== bOrder) {
+      return bOrder - aOrder; // Newer expansions first
+    }
+    
+    // Same expansion, sort by season number (higher number = newer)
+    return getSeasonNumber(b.season) - getSeasonNumber(a.season);
+  });
 }
