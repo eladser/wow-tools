@@ -2,6 +2,8 @@
 
 A comprehensive collection of tools for World of Warcraft players, including log analysis, mythic+ utilities, and raid management tools.
 
+**🌐 Live Demo**: [https://eladser.github.io/wow-tools](https://eladser.github.io/wow-tools)
+
 ## 🚀 Features
 
 - **WarcraftLogs Analyzer**: Detailed analysis of raid performance with damage, healing, and mechanic breakdowns
@@ -11,14 +13,17 @@ A comprehensive collection of tools for World of Warcraft players, including log
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 14 with App Router (Static Export)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS with WoW-themed colors
 - **Charts**: Chart.js with React Chart.js 2
 - **Icons**: Lucide React
 - **APIs**: WarcraftLogs API v2, Raider.IO API
+- **Deployment**: GitHub Pages with GitHub Actions
 
 ## 🏃‍♂️ Getting Started
+
+### Local Development
 
 1. **Clone the repository**:
    ```bash
@@ -29,27 +34,39 @@ A comprehensive collection of tools for World of Warcraft players, including log
 2. **Install dependencies**:
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. **Set up environment variables**:
-   Create a `.env.local` file in the root directory:
-   ```env
-   WARCRAFTLOGS_CLIENT_ID=your_client_id
-   WARCRAFTLOGS_CLIENT_SECRET=your_client_secret
-   NEXT_PUBLIC_RAIDERIO_API_URL=https://raider.io/api/v1
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your API keys (optional for development)
    ```
 
 4. **Run the development server**:
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
 5. **Open your browser**:
    Navigate to [http://localhost:3000](http://localhost:3000)
+
+### GitHub Pages Deployment
+
+This project is configured for automatic deployment to GitHub Pages:
+
+1. **Enable GitHub Pages** in your repository settings:
+   - Go to Settings → Pages
+   - Source: "GitHub Actions"
+
+2. **Set up Repository Secrets**:
+   - Go to Settings → Secrets and variables → Actions
+   - Add the following secrets:
+     - `WARCRAFTLOGS_CLIENT_ID`: Your WarcraftLogs client ID
+     - `WARCRAFTLOGS_CLIENT_SECRET`: Your WarcraftLogs client secret
+
+3. **Deploy**: Push to the `main` branch to trigger automatic deployment
+
+The site will be available at: `https://yourusername.github.io/wow-tools`
 
 ## 📁 Project Structure
 
@@ -61,25 +78,25 @@ wow-tools/
 │   ├── page.tsx           # Home page
 │   ├── logs/              # WarcraftLogs analyzer
 │   └── mythic-plus/       # M+ tools
-├── components/            # Reusable React components
-├── lib/                   # Utility functions and API clients
+├── lib/                   # API clients and utilities
+│   ├── warcraftlogs.ts    # WarcraftLogs API client
+│   └── raiderio.ts        # Raider.IO API client
+├── .github/workflows/     # GitHub Actions
 ├── public/               # Static assets
-└── types/                # TypeScript type definitions
+└── out/                  # Build output (generated)
 ```
 
 ## 🔧 API Integration
 
 ### WarcraftLogs API
-
-To use the WarcraftLogs integration:
-
-1. Register at [WarcraftLogs](https://www.warcraftlogs.com/api/clients/)
-2. Create a new client application
-3. Add your credentials to `.env.local`
+- **Authentication**: OAuth2 Client Credentials
+- **GraphQL**: v2 API with comprehensive raid data
+- **Features**: Report analysis, damage/healing metrics, fight breakdowns
 
 ### Raider.IO API
-
-The Raider.IO API is publicly available and doesn't require authentication for basic endpoints.
+- **Authentication**: None required for basic endpoints
+- **REST API**: Character profiles, M+ scores, guild data
+- **Features**: Character lookup, seasonal scores, dungeon runs
 
 ## 🎨 Styling
 
@@ -93,16 +110,42 @@ The project uses a WoW-themed color palette:
 
 ## 🚧 Development Status
 
-- ✅ Project setup and basic structure
+- ✅ Project setup and GitHub Pages deployment
+- ✅ WoW-themed UI with responsive design
+- ✅ API clients for WarcraftLogs and Raider.IO
 - ✅ Home page with tool overview
-- 🚧 WarcraftLogs analyzer (In Progress)
-- 🚧 Mythic+ tools (In Progress)
+- 🚧 WarcraftLogs analyzer (API integration ready)
+- 🚧 Mythic+ tools (API integration ready)
 - 📋 Raid utilities (Planned)
-- 📋 Raider.IO integration (Planned)
+- 📋 Advanced data visualization (Planned)
+
+## 🔒 Environment Variables
+
+```bash
+# WarcraftLogs API (required for log analysis)
+WARCRAFTLOGS_CLIENT_ID=your_client_id
+WARCRAFTLOGS_CLIENT_SECRET=your_client_secret
+
+# Raider.IO API (no auth required)
+NEXT_PUBLIC_RAIDERIO_API_URL=https://raider.io/api/v1
+```
+
+## 🚀 Deployment
+
+### Automatic Deployment (Recommended)
+- Push to `main` branch triggers GitHub Actions
+- Builds and deploys to GitHub Pages automatically
+- Environment variables injected from repository secrets
+
+### Manual Deployment
+```bash
+npm run build
+npm run deploy
+```
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -119,6 +162,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [WarcraftLogs](https://www.warcraftlogs.com/) for providing combat log analysis
 - [Raider.IO](https://raider.io/) for mythic+ and raid progression data
 - [Blizzard Entertainment](https://www.blizzard.com/) for creating World of Warcraft
+
+## 🔗 Links
+
+- **Live Site**: [https://eladser.github.io/wow-tools](https://eladser.github.io/wow-tools)
+- **Repository**: [https://github.com/eladser/wow-tools](https://github.com/eladser/wow-tools)
+- **Issues**: [https://github.com/eladser/wow-tools/issues](https://github.com/eladser/wow-tools/issues)
 
 ---
 
