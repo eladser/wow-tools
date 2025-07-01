@@ -1,4 +1,7 @@
+'use client'
+
 import { Sword, BarChart3, Users, Trophy } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Home() {
   const tools = [
@@ -65,17 +68,15 @@ export default function Home() {
                 <p className="text-gray-300 mb-4">
                   {tool.description}
                 </p>
-                <a 
-                  href={tool.href}
-                  className="inline-block wow-button disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={(e) => {
-                    if (tool.status === "Coming Soon") {
-                      e.preventDefault()
-                    }
-                  }}
-                >
-                  {tool.status === "Coming Soon" ? "Coming Soon" : "Launch Tool"}
-                </a>
+                {tool.status === "Coming Soon" ? (
+                  <button className="wow-button opacity-50 cursor-not-allowed" disabled>
+                    Coming Soon
+                  </button>
+                ) : (
+                  <Link href={tool.href} className="inline-block wow-button">
+                    Launch Tool
+                  </Link>
+                )}
               </div>
             </div>
           </div>
