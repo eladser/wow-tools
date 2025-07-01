@@ -147,7 +147,26 @@ export interface MythicPlusRuns {
 }
 
 /**
- * Fetch character data from Raider.IO
+ * Determine if we're running in the browser or on the server
+ */
+function isClientSide(): boolean {
+  return typeof window !== 'undefined';
+}
+
+/**
+ * Get the base URL for API calls
+ */
+function getApiBaseUrl(): string {
+  if (isClientSide()) {
+    // In the browser, use relative URLs
+    return '';
+  }
+  // On the server, you might want to use the full URL
+  return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+}
+
+/**
+ * Fetch character data from our API (which proxies Raider.IO)
  */
 export async function getCharacterProfile(
   region: string,
@@ -155,36 +174,39 @@ export async function getCharacterProfile(
   name: string,
   fields: string[] = ['mythic_plus_scores_by_season:current', 'mythic_plus_recent_runs', 'mythic_plus_best_runs', 'mythic_plus_alternate_runs', 'mythic_plus_highest_level_runs']
 ): Promise<RaiderIOCharacter> {
+  const baseUrl = getApiBaseUrl();
   const fieldsParam = fields.join(',');
-  const url = `${RAIDERIO_BASE_URL}/characters/profile?region=${region}&realm=${encodeURIComponent(realm)}&name=${encodeURIComponent(name)}&fields=${fieldsParam}`;
+  const url = `${baseUrl}/api/character?region=${encodeURIComponent(region)}&realm=${encodeURIComponent(realm)}&name=${encodeURIComponent(name)}&fields=${encodeURIComponent(fieldsParam)}`;
   
   const response = await fetch(url);
+  
   if (!response.ok) {
-    if (response.status === 404) {
-      throw new Error('Character not found');
-    }
-    throw new Error(`Failed to fetch character data: ${response.statusText}`);
+    const errorData = await response.json().catch(() => ({ error: response.statusText }));
+    throw new Error(errorData.error || `Failed to fetch character data: ${response.statusText}`);
   }
   
   return response.json();
 }
 
 /**
- * Get current mythic plus affixes
+ * Get current mythic plus affixes from our API
  */
 export async function getCurrentAffixes(region: string = 'us'): Promise<MythicPlusAffixes> {
-  const url = `${RAIDERIO_BASE_URL}/mythic-plus/affixes?region=${region}`;
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}/api/affixes?region=${encodeURIComponent(region)}`;
   
   const response = await fetch(url);
+  
   if (!response.ok) {
-    throw new Error(`Failed to fetch affixes: ${response.statusText}`);
+    const errorData = await response.json().catch(() => ({ error: response.statusText }));
+    throw new Error(errorData.error || `Failed to fetch affixes: ${response.statusText}`);
   }
   
   return response.json();
 }
 
 /**
- * Get mythic plus runs for a specific dungeon
+ * Get mythic plus runs for a specific dungeon (direct API call since we don't have a proxy for this yet)
  */
 export async function getDungeonRuns(
   region: string,
