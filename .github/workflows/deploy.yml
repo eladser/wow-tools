@@ -19,6 +19,9 @@ jobs:
       with:
         node-version: '18'
 
+    - name: Clean API directory 🧹
+      run: rm -rf app/api || true
+
     - name: Install dependencies 🔧
       run: npm install
 
