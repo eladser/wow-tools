@@ -17,18 +17,6 @@ const nextConfig = {
   // GitHub Pages deployment
   basePath: process.env.NODE_ENV === 'production' ? '/wow-tools' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/wow-tools/' : '',
-  // Exclude API routes from static generation since we're using client-side calls
-  exportPathMap: async function (defaultPathMap) {
-    const paths = {}
-    // Only include actual pages, not API routes
-    const pagesToInclude = ['/', '/logs', '/mythic-plus']
-    
-    pagesToInclude.forEach(page => {
-      paths[page] = { page }
-    })
-    
-    return paths
-  },
 };
 
 module.exports = nextConfig;
