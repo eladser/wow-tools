@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-white;
+  }
+}
+
+@layer components {
+  .tool-card {
+    @apply bg-black/20 backdrop-blur-sm border border-wow-blue/30 rounded-lg p-6 hover:border-wow-blue/50 transition-all duration-300 hover:shadow-lg hover:shadow-wow-blue/20;
+  }
+  
+  .wow-button {
+    @apply bg-wow-blue hover:bg-wow-blue/80 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200;
+  }
+  
+  .wow-input {
+    @apply bg-black/30 border border-wow-blue/30 rounded-md px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-wow-blue focus:ring-1 focus:ring-wow-blue;
+  }
+}
