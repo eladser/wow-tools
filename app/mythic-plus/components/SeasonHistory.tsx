@@ -109,8 +109,8 @@ export default function SeasonHistory({ character }: SeasonHistoryProps) {
                       <div className="text-sm text-gray-400 capitalize mb-1">
                         {role === 'dps' ? 'DPS' : role}
                       </div>
-                      <div className={`font-bold ${getScoreColor(score)}`}>
-                        {score.toFixed(0)}
+                      <div className={`font-bold ${getScoreColor(typeof score === 'number' ? score : 0)}`}>
+                        {typeof score === 'number' ? score.toFixed(0) : '0'}
                       </div>
                     </div>
                   ))}
