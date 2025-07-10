@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'WoW Tools - World of Warcraft Utilities',
-  description: 'Essential tools for World of Warcraft players including log analysis, M+ utilities, and raid tools',
+  description: 'Essential tools for World of Warcraft players including warband analysis, log analysis, M+ utilities, and raid management',
 }
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
                 <a href="/" className="hover:text-wow-blue transition-colors">Home</a>
                 <a href="/logs" className="hover:text-wow-blue transition-colors">Log Analyzer</a>
                 <a href="/mythic-plus" className="hover:text-wow-blue transition-colors">M+ Tools</a>
-                <a href="/raid" className="hover:text-wow-blue transition-colors">Raid Tools</a>
+                <a href="/raid-utilities" className="hover:text-wow-blue transition-colors">Raid Utilities</a>
               </div>
             </div>
           </nav>
