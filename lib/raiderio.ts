@@ -146,6 +146,25 @@ export interface MythicPlusRuns {
   }>;
 }
 
+export interface WarbandCharacter {
+  character: RaiderIOCharacter;
+  isMain: boolean;
+  highestSeasonScore: number;
+  currentSeasonScore: number;
+}
+
+export interface WarbandAnalysis {
+  characters: WarbandCharacter[];
+  highestScoresBySeasonAcrossWarband: Record<string, {
+    score: number;
+    character: string;
+    characterClass: string;
+    characterSpec: string;
+  }>;
+  totalCharacters: number;
+  mainCharacter: WarbandCharacter | null;
+}
+
 /**
  * Determine if we're running in the browser or on the server
  */
@@ -163,6 +182,24 @@ function getApiBaseUrl(): string {
   }
   // On the server, you might want to use the full URL
   return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+}
+
+/**
+ * Parse Raider.IO URL to extract character info
+ */
+export function parseRaiderIOUrl(url: string): {region: string, realm: string, name: string} | null {
+  // Match formats like:
+  // https://raider.io/characters/us/area-52/charactername
+  // https://raider.io/characters/eu/kazzak/charactername
+  const match = url.match(/raider\.io\/characters\/([^\/]+)\/([^\/]+)\/([^\/?\s]+)/i);
+  
+  if (!match) return null;
+  
+  return {
+    region: match[1].toLowerCase(),
+    realm: match[2].replace(/-/g, ' '), // Convert URL format back to realm name
+    name: match[3]
+  };
 }
 
 /**
@@ -227,6 +264,175 @@ export async function getCharacterProfileWithAllSeasons(
   ];
   
   return getCharacterProfile(region, realm, name, fields);
+}
+
+/**
+ * Search for warband characters by attempting common variations
+ * This is a heuristic approach since there's no official warband API
+ */
+export async function searchWarbandCharacters(
+  region: string,
+  realm: string,
+  mainCharacterName: string
+): Promise<WarbandAnalysis> {
+  const characters: WarbandCharacter[] = [];
+  const searchedNames = new Set<string>();
+  
+  // Get the main character first
+  try {
+    const mainCharacter = await getCharacterProfileWithAllSeasons(region, realm, mainCharacterName);
+    const mainWarbandChar: WarbandCharacter = {
+      character: mainCharacter,
+      isMain: true,
+      highestSeasonScore: getHighestSeasonScore(mainCharacter),
+      currentSeasonScore: getCurrentSeasonScore(mainCharacter)
+    };
+    characters.push(mainWarbandChar);
+    searchedNames.add(mainCharacterName.toLowerCase());
+  } catch (error) {
+    throw new Error(`Main character not found: ${mainCharacterName}`);
+  }
+  
+  // Try to find alt characters using common naming patterns
+  const baseNames = generateAltNameVariations(mainCharacterName);
+  
+  for (const altName of baseNames) {
+    if (searchedNames.has(altName.toLowerCase())) continue;
+    
+    try {
+      const altCharacter = await getCharacterProfileWithAllSeasons(region, realm, altName);
+      const altWarbandChar: WarbandCharacter = {
+        character: altCharacter,
+        isMain: false,
+        highestSeasonScore: getHighestSeasonScore(altCharacter),
+        currentSeasonScore: getCurrentSeasonScore(altCharacter)
+      };
+      characters.push(altWarbandChar);
+      searchedNames.add(altName.toLowerCase());
+    } catch (error) {
+      // Character not found, continue searching
+      continue;
+    }
+  }
+  
+  // Calculate highest scores by season across all characters
+  const highestScoresBySeasonAcrossWarband: Record<string, {
+    score: number;
+    character: string;
+    characterClass: string;
+    characterSpec: string;
+  }> = {};
+  
+  characters.forEach(({ character }) => {
+    if (character.mythic_plus_scores_by_season) {
+      character.mythic_plus_scores_by_season.forEach(season => {
+        const seasonId = season.season;
+        const score = season.scores.all;
+        
+        if (!highestScoresBySeasonAcrossWarband[seasonId] || score > highestScoresBySeasonAcrossWarband[seasonId].score) {
+          highestScoresBySeasonAcrossWarband[seasonId] = {
+            score: score,
+            character: character.name,
+            characterClass: character.class,
+            characterSpec: character.active_spec_name
+          };
+        }
+      });
+    }
+  });
+  
+  return {
+    characters: characters.sort((a, b) => b.highestSeasonScore - a.highestSeasonScore),
+    highestScoresBySeasonAcrossWarband,
+    totalCharacters: characters.length,
+    mainCharacter: characters.find(c => c.isMain) || null
+  };
+}
+
+/**
+ * Generate common alt name variations
+ */
+function generateAltNameVariations(baseName: string): string[] {
+  const variations: string[] = [];
+  const baseNameLower = baseName.toLowerCase();
+  
+  // Common suffixes for alts
+  const suffixes = ['alt', 'bank', 'twink', 'dk', 'dh', 'hunter', 'mage', 'priest', 'warrior', 'lock', 'sham', 'pal', 'druid', 'monk', 'rogue'];
+  
+  // Add suffixes
+  suffixes.forEach(suffix => {
+    variations.push(baseName + suffix);
+    variations.push(baseNameLower + suffix);
+  });
+  
+  // Add common prefixes
+  const prefixes = ['alt', 'bank', 'twink'];
+  prefixes.forEach(prefix => {
+    variations.push(prefix + baseName);
+    variations.push(prefix + baseNameLower);
+  });
+  
+  // Try shortened versions
+  if (baseName.length > 4) {
+    const shortName = baseName.substring(0, 4);
+    variations.push(shortName);
+    variations.push(shortName + 'alt');
+    variations.push(shortName + 'bank');
+  }
+  
+  // Try with numbers
+  for (let i = 1; i <= 9; i++) {
+    variations.push(baseName + i);
+    variations.push(baseNameLower + i);
+  }
+  
+  return [...new Set(variations)]; // Remove duplicates
+}
+
+/**
+ * Get the highest season score for a character
+ */
+function getHighestSeasonScore(character: RaiderIOCharacter): number {
+  if (!character.mythic_plus_scores_by_season) return 0;
+  
+  return Math.max(...character.mythic_plus_scores_by_season.map(season => season.scores.all));
+}
+
+/**
+ * Get current season score for a character
+ */
+function getCurrentSeasonScore(character: RaiderIOCharacter): number {
+  if (!character.mythic_plus_scores_by_season || character.mythic_plus_scores_by_season.length === 0) return 0;
+  
+  return character.mythic_plus_scores_by_season[0].scores.all;
+}
+
+/**
+ * Search for WarcraftLogs for a specific M+ run
+ */
+export async function searchWarcraftLogsForRun(
+  characterName: string,
+  realm: string,
+  region: string,
+  runDate: string,
+  dungeonName: string
+): Promise<string | null> {
+  try {
+    // Convert run date to a searchable format
+    const runDateObj = new Date(runDate);
+    const dayBefore = new Date(runDateObj.getTime() - 24 * 60 * 60 * 1000);
+    const dayAfter = new Date(runDateObj.getTime() + 24 * 60 * 60 * 1000);
+    
+    // Search WarcraftLogs for M+ logs from this character around this date
+    // This is a simplified approach - in reality you'd need to use the WCL API
+    // For now, we'll return a search URL that users can manually check
+    const searchUrl = `https://www.warcraftlogs.com/reports/characters/${region}/${realm}/${characterName}#boss=-3&difficulty=0&start=${dayBefore.getTime()}&end=${dayAfter.getTime()}`;
+    
+    return searchUrl;
+  } catch (error) {
+    console.error('Error searching for WarcraftLogs:', error);
+    return null;
+  }
 }
 
 /**
