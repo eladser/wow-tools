@@ -1,15 +1,37 @@
 # WoW Tools 🏰
 
-A comprehensive collection of tools for World of Warcraft players, including log analysis, mythic+ utilities, and raid management tools.
+A comprehensive collection of tools for World of Warcraft players, including warband analysis, log analysis, mythic+ utilities, and raid management tools.
 
 **🌐 Live Demo**: [https://eladser.github.io/wow-tools](https://eladser.github.io/wow-tools)
 
 ## 🚀 Features
 
-- **WarcraftLogs Analyzer**: Detailed analysis of raid performance with damage, healing, and mechanic breakdowns
-- **Mythic+ Tools**: Track seasonal progress, analyze routes, and compare performance
-- **Raid Utilities**: Tools for raid leaders including roster management and strategy planning  
-- **Raider.IO Integration**: View previous season scores and character progression
+### 🏆 Enhanced Mythic+ Tools
+- **Warband Analysis**: Automatically discover and analyze all characters in your warband
+- **Highest Scores by Season**: Track the best M+ scores across all your characters for each season
+- **WarcraftLogs Integration**: Direct links to M+ logs that match your best run dates
+- **URL Support**: Paste Raider.IO URLs directly for instant character lookup
+- **Complete Season History**: View progression across all M+ seasons from BFA to current
+
+### 📊 WarcraftLogs Analyzer
+- **Comprehensive Fight Analysis**: Detailed breakdown of each raid encounter
+- **DPS/HPS Rankings**: Complete performance metrics with role-specific analysis
+- **Fight-by-Fight Comparison**: Compare performance across multiple encounters
+- **Deep Dive Integration**: Direct links to WarcraftLogs for advanced analysis
+- **Kill vs. Wipe Analysis**: Track progression with detailed attempt breakdowns
+
+### 👥 Raid Utilities
+- **Multi-Roster Management**: Create and manage multiple raid rosters
+- **Role-Based Organization**: Track tanks, healers, and DPS with attendance
+- **Strategy Planning**: Boss-specific strategies with priority assignments
+- **Attendance Tracking**: Monitor raid member participation
+- **Status Management**: Track confirmed/tentative/declined responses
+
+### 🔗 Advanced Integrations
+- **Raider.IO API**: Complete integration with character profiles and M+ data
+- **WarcraftLogs API v2**: Full GraphQL integration for raid analysis
+- **URL Parsing**: Support for Raider.IO URLs with auto-detection
+- **Cross-Platform Links**: Seamless integration with external tools
 
 ## 🛠️ Tech Stack
 
@@ -77,10 +99,11 @@ wow-tools/
 │   ├── layout.tsx         # Root layout
 │   ├── page.tsx           # Home page
 │   ├── logs/              # WarcraftLogs analyzer
-│   └── mythic-plus/       # M+ tools
+│   ├── mythic-plus/       # M+ tools with warband analysis
+│   └── raid-utilities/    # Raid management tools
 ├── lib/                   # API clients and utilities
 │   ├── warcraftlogs.ts    # WarcraftLogs API client
-│   └── raiderio.ts        # Raider.IO API client
+│   └── raiderio.ts        # Raider.IO API client with warband support
 ├── .github/workflows/     # GitHub Actions
 ├── public/               # Static assets
 └── out/                  # Build output (generated)
@@ -92,11 +115,13 @@ wow-tools/
 - **Authentication**: OAuth2 Client Credentials
 - **GraphQL**: v2 API with comprehensive raid data
 - **Features**: Report analysis, damage/healing metrics, fight breakdowns
+- **Integration**: Direct linking from M+ runs to potential logs
 
 ### Raider.IO API
 - **Authentication**: None required for basic endpoints
 - **REST API**: Character profiles, M+ scores, guild data
-- **Features**: Character lookup, seasonal scores, dungeon runs
+- **Features**: Character lookup, seasonal scores, dungeon runs, warband discovery
+- **URL Support**: Parse and auto-fill from Raider.IO profile URLs
 
 ## 🎨 Styling
 
@@ -110,14 +135,12 @@ The project uses a WoW-themed color palette:
 
 ## 🚧 Development Status
 
-- ✅ Project setup and GitHub Pages deployment
-- ✅ WoW-themed UI with responsive design
-- ✅ API clients for WarcraftLogs and Raider.IO
-- ✅ Home page with tool overview
-- 🚧 WarcraftLogs analyzer (API integration ready)
-- 🚧 Mythic+ tools (API integration ready)
-- 📋 Raid utilities (Planned)
-- 📋 Advanced data visualization (Planned)
+- ✅ **Enhanced M+ Tools**: Warband analysis, WarcraftLogs integration, URL support
+- ✅ **WarcraftLogs Analyzer**: Comprehensive fight analysis with rankings
+- ✅ **Raid Utilities**: Roster management, strategy planning, attendance tracking
+- ✅ **Modern UI**: WoW-themed responsive design with enhanced UX
+- 🚧 **Advanced Features**: Guild analytics, achievement tracking
+- 📋 **Mobile App**: Native mobile application (Planned)
 
 ## 🔒 Environment Variables
 
@@ -142,6 +165,26 @@ NEXT_PUBLIC_RAIDERIO_API_URL=https://raider.io/api/v1
 npm run build
 npm run deploy
 ```
+
+## 📋 Feature Highlights
+
+### 🏰 Warband Analysis
+- **Auto-Discovery**: Finds alternative characters using naming patterns
+- **Cross-Character Analysis**: Highest M+ scores across all characters by season
+- **Performance Tracking**: Identifies main vs. alt character progression
+- **WarcraftLogs Integration**: Links to logs for current season best runs
+
+### 📊 Comprehensive Analytics
+- **Season-by-Season Breakdown**: Complete historical M+ progression
+- **Role-Based Performance**: Tank, healer, and DPS specific metrics
+- **Fight Analysis**: Detailed raid encounter breakdowns
+- **External Integration**: Seamless links to WarcraftLogs and Raider.IO
+
+### 👥 Raid Management
+- **Multiple Rosters**: Support for different raid teams and difficulties
+- **Strategy Planning**: Boss-specific notes with priority assignments
+- **Attendance System**: Track member participation and reliability
+- **Status Management**: Handle confirmations, tentatives, and declines
 
 ## 🤝 Contributing
 
