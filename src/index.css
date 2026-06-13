@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+/*
+  Arcane Codex. Themed to Midnight: a void-touched dark soaked in twilight
+  indigo and arcane violet, framed in aged gold like an in-game window.
+  Item-quality colors carry meaning; category hues (arcane / fel / blood)
+  give each hall its own identity.
+*/
+@theme {
+  --color-bg: #0b0913;
+  --color-surface: #14101f;
+  --color-elevated: #1c172b;
+  --color-fg: #ece6f5;
+  --color-muted: #b0a6c4;
+  --color-faint: #756c8a;
+  --color-border: #2a2340;
+  --color-border-strong: #3d3358;
+
+  /* aged-gold frame metal */
+  --color-gold: #c9a227;
+  --color-gold-bright: #e8d18a;
+  --color-accent: #c9a227;
+  --color-accent-fg: #1a1404;
+
+  /* arcane magic glow */
+  --color-arcane: #b06bff;
+  --color-arcane-deep: #7a3cd6;
+
+  /* category identities */
+  --color-mplus: #4db2e8;
+  --color-raid: #a335ee;
+  --color-pvp: #e0524a;
+
+  /* item quality */
+  --color-uncommon: #1eff00;
+  --color-rare: #2a8fff;
+  --color-epic: #c061ff;
+  --color-legendary: #ff8a1c;
+  --color-artifact: #e6cc80;
+
+  --color-ok: #4cb964;
+  --color-bad: #e6553f;
+  --color-warn: #d9a23c;
+
+  --font-display: "Cinzel Decorative", "Cinzel", serif;
+  --font-heading: "Cinzel", "Palatino Linotype", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --animate-fade-in: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-rise: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes rise { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes glow-drift {
+  0%, 100% { transform: translate(-6%, -4%) scale(1); opacity: 0.55; }
+  50% { transform: translate(6%, 5%) scale(1.15); opacity: 0.8; }
+}
+
+@layer base {
+  html { color-scheme: dark; }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    min-height: 100dvh;
+  }
+
+  /* Void atmosphere: a deep arcane radial behind everything, plus a slow
+     drifting glow and a vignette to pull focus inward. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(120% 80% at 50% -10%, #2a1648 0%, #160f2a 38%, #0b0913 72%),
+      radial-gradient(80% 60% at 85% 110%, #1a2d4d 0%, transparent 55%);
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(40% 40% at 30% 25%, rgba(176, 107, 255, 0.22), transparent 70%);
+    animation: glow-drift 22s ease-in-out infinite;
+  }
+
+  ::selection { background-color: color-mix(in oklch, var(--color-arcane) 35%, transparent); }
+
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-gold);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: 999px; border: 2px solid var(--color-bg); }
+  ::-webkit-scrollbar-thumb:hover { background: #4a3f6b; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  /* grain overlay, fixed and inert */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Codex panel: the in-game window frame. Gold edge, inner arcane sheen,
+     corner brackets drawn by the Panel component's spans. */
+  .codex-panel {
+    position: relative;
+    background:
+      linear-gradient(180deg, color-mix(in oklch, var(--color-surface) 92%, var(--color-arcane) 8%), var(--color-surface));
+    border: 1px solid color-mix(in oklch, var(--color-gold) 40%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklch, var(--color-gold-bright) 18%, transparent),
+      inset 0 0 40px rgba(122, 60, 214, 0.08),
+      0 16px 40px -16px rgba(0, 0, 0, 0.8);
+  }
+
+  .corner-bracket {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--color-gold);
+    pointer-events: none;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold;
+    font-family: var(--font-heading);
+    letter-spacing: 0.02em;
+    color: var(--color-accent-fg);
+    background: linear-gradient(180deg, var(--color-gold-bright), var(--color-gold));
+    box-shadow: 0 2px 0 #8a6e1a, 0 6px 16px -6px rgba(201, 162, 39, 0.6);
+    transition: filter 160ms ease-out, transform 120ms ease-out;
+  }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-primary:disabled { opacity: 0.5; pointer-events: none; }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium;
+    background-color: var(--color-elevated);
+    color: var(--color-fg);
+    border: 1px solid var(--color-border-strong);
+    transition: background-color 160ms ease-out, border-color 160ms ease-out, transform 120ms ease-out;
+  }
+  .btn-secondary:hover { border-color: color-mix(in oklch, var(--color-gold) 50%, transparent); color: var(--color-gold-bright); }
+  .btn-secondary:active { transform: scale(0.98); }
+
+  .field-input {
+    @apply px-3 py-1.5 text-sm border rounded-md w-full;
+    font-family: var(--font-mono);
+    background-color: rgba(11, 9, 19, 0.7);
+    border-color: var(--color-border-strong);
+    color: var(--color-fg);
+  }
+  .field-input::placeholder { color: var(--color-faint); }
+  .field-input:focus { border-color: var(--color-gold); box-shadow: 0 0 0 1px color-mix(in oklch, var(--color-gold) 40%, transparent); outline: none; }
+
+  .field-select {
+    @apply px-2.5 py-1.5 text-xs border rounded-md;
+    font-family: var(--font-mono);
+    background-color: var(--color-elevated);
+    border-color: var(--color-border-strong);
+    color: var(--color-fg);
+  }
+
+  /* gold filigree divider */
+  .rule-arcane {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--color-gold) 60%, transparent), transparent);
+  }
+}

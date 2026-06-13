@@ -1,0 +1,19 @@
+{
+  "updated": "2026-06-13",
+  "notice": null,
+  "news": [
+    {
+      "date": "2026-06-13",
+      "tag": "Site",
+      "title": "Rebuilt from the ground up",
+      "body": "New tools for score planning, the Great Vault, Dawncrest upgrades, and PvP goals. Character lookups and score data come live from raider.io."
+    },
+    {
+      "date": "2026-03-17",
+      "tag": "Season",
+      "title": "Midnight Season 1 is live",
+      "body": "Eight-dungeon pool, the new Dawncrest upgrade system, and Xal'atath's Bargain weekly affixes. Keystone Legend sits at 3000 again."
+    }
+  ],
+  "seasonPatch": {}
+}

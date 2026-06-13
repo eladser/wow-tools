@@ -1,46 +1,45 @@
 {
   "name": "wow-tools",
-  "version": "1.0.0",
-  "description": "A collection of useful tools for World of Warcraft players",
-  "main": "index.js",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Tools for World of Warcraft players: Mythic+, raid, and PvP utilities",
+  "homepage": "https://eladser.github.io/wow-tools/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eladser/wow-tools.git"
+  },
+  "license": "MIT",
+  "author": "eladser",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "export": "npm run build",
-    "deploy": "npm run export && touch out/.nojekyll"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --max-warnings 0",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "^14.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "axios": "^1.6.0",
-    "chart.js": "^4.4.0",
-    "react-chartjs-2": "^5.2.0",
-    "tailwindcss": "^3.3.0",
-    "lucide-react": "^0.263.1"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "^14.0.0",
-    "postcss": "^8.4.31",
-    "typescript": "^5.0.0"
-  },
-  "keywords": [
-    "world-of-warcraft",
-    "wow",
-    "tools",
-    "warcraftlogs",
-    "raider.io",
-    "mythic-plus",
-    "raid"
-  ],
-  "author": "eladser",
-  "license": "MIT",
-  "homepage": "https://eladser.github.io/wow-tools"
+    "@eslint/js": "^10.0.1",
+    "@fontsource/cinzel": "^5.2.8",
+    "@fontsource/cinzel-decorative": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/node": "^25.9.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "eslint": "^10.4.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "lucide-react": "^1.18.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0",
+    "vite": "^8.0.16"
+  }
 }
