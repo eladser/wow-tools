@@ -19,14 +19,14 @@ export function CrestCalculator() {
   const rows = [
     { label: 'Item level', value: `${ilvls[lo - 1]} → ${ilvls[hi - 1]}` },
     { label: 'Upgrades', value: String(steps) },
-    { label: 'Crests', value: `${crests} ${track === 'Myth' ? 'Myth' : 'Hero'} Dawncrests` },
+    { label: 'Crests', value: `${crests} ${track} Mistcrests` },
     { label: 'Weeks (capped)', value: weeks === 0 ? '—' : String(weeks) },
   ];
 
   return (
     <div className="space-y-4">
     <Hint>
-      Pick a gear track and the ranks you're upgrading from and to. It totals the Dawncrests you need and how many
+      Pick a gear track and the ranks you're upgrading from and to. It totals the Mistcrests you need and how many
       weeks the weekly cap allows.
     </Hint>
     <Bench
@@ -47,7 +47,7 @@ export function CrestCalculator() {
             </Field>
           </Row>
           <p className="font-mono text-xs text-faint">
-            Every rank costs {CREST.costPerUpgrade} Dawncrests of the matching type; you earn at most {CREST.weeklyCapPerType} per
+            Every rank costs {CREST.costPerUpgrade} Mistcrests of the matching type; you earn at most {CREST.weeklyCapPerType} per
             type per week, so one full piece per track per week. Valorstones are gone in Midnight.
           </p>
         </>

@@ -12,7 +12,7 @@ Mythic+, raid, and PvP utilities for the current World of Warcraft season. Runs 
 
 **Mythic+** — Character lookup (score, gear, best run per dungeon, live from raider.io), a score planner that reads your runs and picks the cheapest keys toward a target, a two-character compare, the live title cutoff for your region, the affix schedule, a key score calculator, and dungeon timers.
 
-**Raid** — Great Vault planner (enter your keys, see your three slots), the Dawncrest upgrade calculator, reset countdowns, a raid buff coverage matrix you build from a roster, and a weekly checklist that resets itself.
+**Raid** — Great Vault planner (enter your keys, see your three slots), the Mistcrest upgrade calculator, reset countdowns, a raid buff coverage matrix you build from a roster, and a weekly checklist that resets itself.
 
 **PvP** — Rating milestones and what each bracket unlocks, plus the weekly conquest cap.
 

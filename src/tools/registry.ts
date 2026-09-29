@@ -35,7 +35,7 @@ export const TOOLS: Tool[] = [
 
   // Raid
   { id: 'vault', name: 'Great Vault Planner', desc: 'Tick what you ran this week, see your vault choices.', group: 'Raid', keywords: 'weekly chest reward ilvl', component: VaultPlanner },
-  { id: 'crests', name: 'Upgrade Calculator', desc: 'Dawncrest costs from your item level to the cap.', group: 'Raid', keywords: 'dawncrest upgrade track gear ilvl', component: CrestCalculator },
+  { id: 'crests', name: 'Upgrade Calculator', desc: 'Mistcrest costs from your item level to the cap.', group: 'Raid', keywords: 'mistcrest dawncrest upgrade track gear ilvl', component: CrestCalculator },
   { id: 'resets', name: 'Reset Timers', desc: 'Time to daily and weekly reset, per region.', group: 'Raid', keywords: 'weekly daily reset region countdown', component: Resets },
   { id: 'comp', name: 'Raid Buff Coverage', desc: 'Build a roster, see which raid buffs and utilities are missing.', group: 'Raid', keywords: 'roster composition bloodlust battle res buffs', component: CompMatrix },
   { id: 'checklist', name: 'Weekly Checklist', desc: 'Track vault, crests, and chores. Resets itself each week.', group: 'Raid', keywords: 'todo weekly chores vault crest conquest tracker', component: WeeklyChecklist },

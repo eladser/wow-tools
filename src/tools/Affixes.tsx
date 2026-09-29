@@ -37,9 +37,10 @@ export function Affixes() {
 
       <RefSection title="how the week scales">
         <RefTable rows={[
-          ['+2 to +6', 'one seasonal Bargain'],
-          ['+7 to +9', 'Bargain plus Fortified or Tyrannical (alternates weekly)'],
-          ['+10 and up', 'Bargain plus both Fortified and Tyrannical'],
+          ['+2 to +4', "Lindormi's Guidance: highlighted enemies give the full enemy count, deaths don't cost time"],
+          ['+5', 'One seasonal Bargain begins'],
+          ['+7', 'Fortified or Tyrannical joins (alternates weekly)'],
+          ['+10 and up', 'Both Fortified and Tyrannical active'],
           ['+12 and up', "Xal'atath's Guile replaces the Bargain (each death costs 15s)"],
         ]} />
       </RefSection>

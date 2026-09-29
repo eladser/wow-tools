@@ -3,12 +3,12 @@ import { useSeason } from '@/lib/content';
 import { Bench, PaneLabel, Field, Row, RefSection, RefTable, Hint } from '@/components/ui';
 
 function vaultForKey(level: number): { ilvl: number; track: string } {
-  if (level >= 10) return { ilvl: 272, track: 'Myth 1/6' };
-  if (level >= 7) return { ilvl: 269, track: 'Hero 4/6' };
-  if (level >= 6) return { ilvl: 266, track: 'Hero 3/6' };
-  if (level >= 4) return { ilvl: 263, track: 'Hero 2/6' };
-  if (level >= 2) return { ilvl: 259, track: 'Hero 1/6' };
-  return { ilvl: 256, track: 'Champion 4/6' };
+  if (level >= 10) return { ilvl: 318, track: 'Myth 1/6' };
+  if (level >= 7) return { ilvl: 315, track: 'Hero 4/6' };
+  if (level >= 6) return { ilvl: 311, track: 'Hero 3/6' };
+  if (level >= 4) return { ilvl: 308, track: 'Hero 2/6' };
+  if (level >= 2) return { ilvl: 305, track: 'Hero 1/6' };
+  return { ilvl: 302, track: 'Champion 4/6' };
 }
 
 export function VaultPlanner() {
