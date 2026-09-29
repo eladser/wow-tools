@@ -1,6 +1,6 @@
 {
   "name": "wow-tools",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "Tools for World of Warcraft players: Mythic+, raid, and PvP utilities",
   "homepage": "https://eladser.github.io/wow-tools/",

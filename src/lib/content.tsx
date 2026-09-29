@@ -25,6 +25,8 @@ interface ContentFile {
   news?: NewsItem[];
   // partial override of any season slice, applied over the bundled baseline
   seasonPatch?: Partial<SeasonData>;
+  // current game patch, shown next to the season name (e.g. "12.1")
+  gamePatch?: string;
 }
 
 interface SeasonApi extends SeasonData {
@@ -39,6 +41,14 @@ interface ContentValue {
   notice: Notice | null;
   updated: string | null;
   liveAffix: AffixWeek | null;
+  seasonMismatch: string | null;
+  gamePatch: string | null;
+}
+
+// raider.io's static-data feed names seasons "MN Season N"; show the full name instead.
+function niceSeasonName(raw: string): string {
+  const m = raw.match(/^MN Season (\d+)/i);
+  return m ? `Midnight Season ${m[1]}` : raw;
 }
 
 function bind(data: SeasonData): SeasonApi {
@@ -56,6 +66,8 @@ const DEFAULT_VALUE: ContentValue = {
   notice: null,
   updated: null,
   liveAffix: null,
+  seasonMismatch: null,
+  gamePatch: null,
 };
 
 const Ctx = createContext<ContentValue>(DEFAULT_VALUE);
@@ -78,6 +90,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       if (!alive) return;
 
       let data: SeasonData = DEFAULT_SEASON;
+      let seasonMismatch: string | null = null;
 
       // live raider.io: real dungeon pool (timers, icons) + season start/slug/name
       if (s) {
@@ -95,10 +108,16 @@ export function ContentProvider({ children }: { children: ReactNode }) {
           season: {
             ...data.season,
             slug: s.slug,
-            name: s.name,
+            name: niceSeasonName(s.name),
             startUsIso: s.starts?.us ?? data.season.startUsIso,
           },
         };
+
+        // the bundled reward tables (crests, tracks, vault ilvls) only get
+        // refreshed by hand; flag it when the live season moved past them
+        if (s.slug !== DEFAULT_SEASON.season.slug) {
+          seasonMismatch = `Reward tables are from ${DEFAULT_SEASON.season.name}; ${niceSeasonName(s.name)} is live, so some numbers may be off.`;
+        }
       }
 
       // manual content.json patch overrides anything above
@@ -110,6 +129,8 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         notice: c?.notice ?? null,
         updated: c?.updated ?? null,
         liveAffix: a ?? null,
+        seasonMismatch,
+        gamePatch: c?.gamePatch ?? null,
       });
     });
 
@@ -123,3 +144,5 @@ export const useSeason = () => useContext(Ctx).season;
 export const useNews = () => useContext(Ctx).news;
 export const useNotice = () => useContext(Ctx).notice;
 export const useLiveAffix = () => useContext(Ctx).liveAffix;
+export const useSeasonMismatch = () => useContext(Ctx).seasonMismatch;
+export const useGamePatch = () => useContext(Ctx).gamePatch;

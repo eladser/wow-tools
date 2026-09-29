@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { Search, X, ChevronLeft } from 'lucide-react';
 import { TOOLS, GROUPS, GROUP_META } from './tools/registry';
 import { Panel } from './components/Panel';
-import { useSeason, useNews, useNotice, useLiveAffix } from './lib/content';
+import { useSeason, useNews, useNotice, useLiveAffix, useSeasonMismatch, useGamePatch } from './lib/content';
 import { version } from '../package.json';
 
 const ART = import.meta.env.BASE_URL + 'art/';
@@ -191,6 +191,8 @@ function Home({ onGo, ws, seasonName }: {
 }) {
   const news = useNews();
   const notice = useNotice();
+  const seasonMismatch = useSeasonMismatch();
+  const gamePatch = useGamePatch();
 
   return (
     <main>
@@ -205,7 +207,7 @@ function Home({ onGo, ws, seasonName }: {
         <div className="relative max-w-340 mx-auto px-4 sm:px-6 pt-20 pb-14 text-center">
           <p className="font-heading text-xs sm:text-sm tracking-[0.34em] uppercase text-arcane mb-4 animate-fade-in"
             style={{ textShadow: '0 0 20px rgba(176,107,255,0.6)' }}>
-            {seasonName}
+            {seasonName}{gamePatch && ` · Patch ${gamePatch}`}
           </p>
           <h1 className="animate-rise">
             <img src={`${ART}wordmark.png`} alt="WoW Tools"
@@ -227,6 +229,17 @@ function Home({ onGo, ws, seasonName }: {
           </div>
         </div>
       </section>
+
+      {/* Season mismatch banner: bundled reward tables lag behind a new live season */}
+      {seasonMismatch && (
+        <div className="max-w-340 mx-auto px-4 sm:px-6 pt-6">
+          <div className="codex-panel rounded-sm px-4 py-2.5 text-sm flex items-center gap-2"
+            style={{ borderColor: 'color-mix(in oklch, var(--color-warn) 50%, transparent)' }}>
+            <span className="text-warn">◆</span>
+            <span className="text-fg">{seasonMismatch}</span>
+          </div>
+        </div>
+      )}
 
       {/* Notice banner */}
       {notice && (
