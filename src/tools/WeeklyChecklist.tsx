@@ -16,7 +16,7 @@ const GROUPS: Array<{ title: string; items: string[] }> = [
   },
   {
     title: 'Currency caps',
-    items: ['Hero Mistcrest cap', 'Myth Mistcrest cap', 'Conquest cap', 'Spark fragment'],
+    items: ['Conquest cap', 'Spark fragment'],
   },
   {
     title: 'Other',

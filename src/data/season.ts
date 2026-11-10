@@ -69,7 +69,9 @@ export const TRACKS: Record<string, number[]> = {
 
 export const CREST = {
   costPerUpgrade: 20,
-  weeklyCapPerType: 100,
+  // Blizzard lifted the weekly cap in 12.1.5 (week of Oct 20). Set a number,
+  // here or via seasonPatch, to bring the capped weeks math back.
+  weeklyCapPerType: null as number | null,
   types: [
     { name: 'Champion Mistcrest', source: 'M0, M+ 2-3, normal raid' },
     { name: 'Hero Mistcrest', source: 'M+ 4-8, heroic raid' },

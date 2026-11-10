@@ -13,21 +13,24 @@ export function CrestCalculator() {
   const hi = Math.max(from, to);
   const steps = hi - lo;
   const crests = steps * CREST.costPerUpgrade;
-  const weeks = Math.ceil(crests / CREST.weeklyCapPerType);
+  const cap = CREST.weeklyCapPerType;
   const ilvls = TRACKS[track];
 
   const rows = [
     { label: 'Item level', value: `${ilvls[lo - 1]} → ${ilvls[hi - 1]}` },
     { label: 'Upgrades', value: String(steps) },
     { label: 'Crests', value: `${crests} ${track} Mistcrests` },
-    { label: 'Weeks (capped)', value: weeks === 0 ? '—' : String(weeks) },
   ];
+  if (cap) {
+    const weeks = Math.ceil(crests / cap);
+    rows.push({ label: 'Weeks (capped)', value: weeks === 0 ? '—' : String(weeks) });
+  }
 
   return (
     <div className="space-y-4">
     <Hint>
-      Pick a gear track and the ranks you're upgrading from and to. It totals the Mistcrests you need and how many
-      weeks the weekly cap allows.
+      Pick a gear track and the ranks you're upgrading from and to. It totals the Mistcrests you need
+      {cap ? ' and how many weeks the weekly cap allows.' : '.'}
     </Hint>
     <Bench
       left={
@@ -47,8 +50,11 @@ export function CrestCalculator() {
             </Field>
           </Row>
           <p className="font-mono text-xs text-faint">
-            Every rank costs {CREST.costPerUpgrade} Mistcrests of the matching type; you earn at most {CREST.weeklyCapPerType} per
-            type per week, so one full piece per track per week. Valorstones are gone in Midnight.
+            Every rank costs {CREST.costPerUpgrade} Mistcrests of the matching type;{' '}
+            {cap
+              ? `you earn at most ${cap} per type per week, so one full piece per track per week.`
+              : "there's no weekly cap since 12.1.5."}
+            {' '}Valorstones are gone in Midnight.
           </p>
         </>
       }
