@@ -107,6 +107,7 @@ export function ScorePlanner() {
   // Sync the default once the live season data arrives (initial value is bundled)
   const legend = season.season.keystoneLegendScore;
   useEffect(() => { setTarget(legend); }, [legend]);
+  const myth = season.season.keystoneMythScore;
 
   const lookup = async (c: CharRef) => {
     setBusy(true);
@@ -149,6 +150,10 @@ export function ScorePlanner() {
               <input type="number" min={0} max={4500} step={50} value={target}
                 onChange={(e) => setTarget(parseInt(e.target.value) || 0)} className="field-input w-24" />
             </Field>
+            <span className="flex gap-2">
+              <button onClick={() => setTarget(legend)} className="btn-secondary text-xs">Legend {legend}</button>
+              <button onClick={() => setTarget(myth)} className="btn-secondary text-xs">Myth {myth}</button>
+            </span>
             {reached ? (
               <span className="font-mono text-sm text-ok">target reached</span>
             ) : (
@@ -186,7 +191,7 @@ export function ScorePlanner() {
       )}
       {!state && !error && (
         <p className="font-mono text-xs text-faint">
-          {season.season.keystoneLegendScore} is the Keystone Legend score this season.
+          {legend} is the Keystone Legend score this season, {myth} is Keystone Myth.
         </p>
       )}
     </div>

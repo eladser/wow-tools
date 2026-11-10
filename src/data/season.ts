@@ -12,6 +12,7 @@ export const SEASON = {
   // static-data feed overrides this at runtime when reachable.
   startUsIso: '2026-08-18T15:00:00Z',
   keystoneLegendScore: 3000,
+  keystoneMythScore: 3600,
 };
 
 export interface Dungeon {
