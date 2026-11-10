@@ -110,6 +110,7 @@ export async function fetchStaticData(expansionId: number): Promise<StaticSeason
 }
 
 export interface LiveAffix {
+  id: number;
   name: string;
   description: string;
   icon_url: string;

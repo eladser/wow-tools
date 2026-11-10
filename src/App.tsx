@@ -39,9 +39,9 @@ export default function App() {
   const rot = season.rotationForWeek(week);
   // prefer the live affix (accurate) over the guessed rotation
   const bargain = liveAffix?.affix_details[0]?.name.split(':').pop()?.trim() ?? rot.bargain;
-  const second = liveAffix
-    ? (liveAffix.title.includes('Tyrannical') ? 'Tyrannical' : 'Fortified')
-    : rot.second;
+  // affixes come in the order they kick in, so the first of Tyrannical (9) and
+  // Fortified (10) is the one that joins at +7
+  const second = liveAffix?.affix_details.find(a => a.id === 9 || a.id === 10)?.name ?? rot.second;
   const ws = { week, bargain, second };
 
   useEffect(() => {
