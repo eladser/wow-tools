@@ -23,6 +23,7 @@ export function CutoffTracker() {
       .then((d) => {
         if (!alive) return;
         const c = d.cutoffs.p999;
+        if (!c?.all) throw new Error('No title cutoff for this region yet');
         setP999(c);
         setFaction((f) => (c[f] ? f : 'all'));
       })
