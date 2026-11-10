@@ -38,7 +38,7 @@ doesn't expose.
 Edit `src/data/season.ts`, the single source of truth for the bundled data, then
 bump the version and push. The checklist:
 
-1. `SEASON`: `keystoneLegendScore` (the Score Planner default). `slug`, `name`, and `startUsIso` are auto-filled from raider.io; the bundled values are just the offline fallback.
+1. `SEASON`: `keystoneLegendScore` (the Score Planner default) and `keystoneMythScore` (its Myth target button). `slug`, `name`, and `startUsIso` are auto-filled from raider.io; the bundled values are just the offline fallback.
 2. `TRACKS`, `CREST`, `MPLUS_REWARDS`, `RAID_REWARDS`: reward item levels and upgrade costs.
 3. `PVP`: conquest start/step and rating rewards.
 4. `WEEK_ROTATION` / `BARGAIN_DESC`: only the fallback affix guess. The live affix feed overrides it, so this rarely matters.

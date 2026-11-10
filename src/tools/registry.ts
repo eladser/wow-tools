@@ -26,7 +26,7 @@ export interface Tool {
 export const TOOLS: Tool[] = [
   // Mythic+
   { id: 'character', name: 'Character Lookup', desc: 'Score, gear, and best run per dungeon for any character.', group: 'Mythic+', keywords: 'raider.io score profile runs ilvl', component: CharacterLookup },
-  { id: 'planner', name: 'Score Planner', desc: 'The cheapest keys between your score and your target.', group: 'Mythic+', keywords: 'target rating push 3000 legend plan', component: ScorePlanner },
+  { id: 'planner', name: 'Score Planner', desc: 'The cheapest keys between your score and your target.', group: 'Mythic+', keywords: 'target rating push 3000 legend 3600 myth plan', component: ScorePlanner },
   { id: 'compare', name: 'Character Compare', desc: 'Two characters side by side: score, gear, best key per dungeon.', group: 'Mythic+', keywords: 'compare versus alt twink side by side', component: CharacterCompare },
   { id: 'cutoff', name: 'Title Cutoff', desc: 'Live top 0.1% cutoff for your region, next to your score.', group: 'Mythic+', keywords: 'title cutoff percent rank ladder', component: CutoffTracker },
   { id: 'affixes', name: 'Affix Schedule', desc: "This week's Bargain and the coming rotation.", group: 'Mythic+', keywords: 'xalatath bargain weekly fortified tyrannical', component: Affixes },
