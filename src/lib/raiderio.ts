@@ -71,7 +71,11 @@ export async function fetchCharacter(
 
 export interface SeasonCutoffs {
   cutoffs: {
-    p999: { all: { quantileMinValue: number } };
+    p999: {
+      all: { quantileMinValue: number };
+      horde?: { quantileMinValue: number };
+      alliance?: { quantileMinValue: number };
+    };
     p990?: { all: { quantileMinValue: number } };
   };
 }
