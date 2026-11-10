@@ -50,7 +50,7 @@ export function Resets() {
       <Hint>Live countdown to the next daily and weekly reset for US and EU. Nothing to enter.</Hint>
       <ResultRows rows={rows} />
       <p className="font-mono text-xs text-faint">
-        Weekly reset clears raid lockouts, vault, and crest caps. Your keystone drops one level and rerolls dungeon.
+        Weekly reset clears raid lockouts and the vault. Your keystone drops one level and rerolls dungeon.
       </p>
     </div>
   );
